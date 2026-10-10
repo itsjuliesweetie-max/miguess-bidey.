@@ -1,0 +1,451 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Happy Birthday Migueee! 🎉</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Canvas Confetti Library -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;600;700;800&family=Sacramento&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            pastel: {
+              pink: '#ffe3ec',
+              rose: '#ffb3c6',
+              deepPink: '#ff758f',
+              cream: '#fff5f7',
+              gold: '#ffd166',
+              softWhite: '#ffffff',
+              purple: '#f0e6ff',
+            }
+          },
+          fontFamily: {
+            sans: ['Nunito', 'sans-serif'],
+            heading: ['Fredoka', 'sans-serif'],
+            cursive: ['Sacramento', 'cursive'],
+          },
+          animation: {
+            'float-slow': 'float 6s ease-in-out infinite',
+            'pulse-glow': 'pulseGlow 2s infinite alternate',
+            'bounce-gentle': 'bounceGentle 2s infinite',
+            'shimmer': 'shimmer 2s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px) rotate(0deg)' },
+              '50%': { transform: 'translateY(-12px) rotate(2deg)' },
+            },
+            pulseGlow: {
+              '0%': { boxShadow: '0 0 15px rgba(255, 117, 143, 0.4)' },
+              '100%': { boxShadow: '0 0 35px rgba(255, 117, 143, 0.8), 0 0 15px rgba(255, 209, 102, 0.6)' },
+            },
+            bounceGentle: {
+              '0%, 100%': { transform: 'translateY(0)' },
+              '50%': { transform: 'translateY(-8px)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #ffe3ec 0%, #fff5f7 50%, #f0e6ff 100%);
+      background-attachment: fixed;
+      overflow-x: hidden;
+    }
+
+    /* Floating background items */
+    .floating-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .balloon {
+      position: absolute;
+      bottom: -100px;
+      opacity: 0.75;
+      animation: floatUp 14s linear infinite;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 0.8;
+      }
+      100% {
+        transform: translateY(-120vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Candle Flame Animation */
+    .flame {
+      transform-origin: center bottom;
+      animation: flicker 0.6s ease-in-out infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) rotate(-2deg); opacity: 0.9; }
+      100% { transform: scale(1.18) rotate(2deg); opacity: 1; filter: drop-shadow(0 0 10px #ffd166); }
+    }
+
+    .smoke {
+      opacity: 0;
+      transform-origin: bottom center;
+    }
+
+    .out .flame {
+      display: none;
+    }
+
+    .out .smoke {
+      animation: rise 1.5s ease-out forwards;
+    }
+
+    @keyframes rise {
+      0% { opacity: 0.8; transform: translateY(0) scale(0.5); }
+      100% { opacity: 0; transform: translateY(-30px) scale(1.5); }
+    }
+
+    /* 3D Flip Card Effect */
+    .flip-card {
+      perspective: 1000px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      transform-style: preserve-3d;
+    }
+    .flip-card.flipped .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      -webkit-backface-visibility: hidden;
+      backface-visibility: hidden;
+      border-radius: 1.5rem;
+    }
+    .flip-card-back {
+      transform: rotateY(180deg);
+    }
+
+    /* Custom Glassmorphism */
+    .glass-card {
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border: 2px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 20px 40px rgba(255, 179, 198, 0.25);
+    }
+
+    /* Sparkle effect */
+    .sparkle {
+      position: absolute;
+      pointer-events: none;
+      background: radial-gradient(circle, #ffffff 10%, transparent 70%);
+      border-radius: 50%;
+      animation: sparkleAnim 1.2s ease-in-out forwards;
+    }
+
+    @keyframes sparkleAnim {
+      0% { transform: scale(0) rotate(0deg); opacity: 1; }
+      50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+      100% { transform: scale(0) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="font-sans text-gray-700 min-h-screen flex flex-col justify-between relative selection:bg-pastel-rose selection:text-white">
+
+  <!-- Floating background balloons -->
+  <div class="floating-container" id="floatingBg"></div>
+
+  <!-- Audio Controls Floating Bar -->
+  <header class="fixed top-4 right-4 z-50 flex items-center gap-3">
+    <button id="soundToggleBtn" onclick="toggleAudio()" class="glass-card p-3 rounded-full text-pastel-deepPink hover:scale-110 active:scale-95 transition-all duration-300 shadow-md flex items-center justify-center gap-2 font-semibold text-sm">
+      <i data-lucide="music-4" id="musicIcon" class="w-5 h-5"></i>
+      <span id="musicText" class="hidden sm:inline pr-1">Play Melody 🎵</span>
+    </button>
+  </header>
+
+  <main class="container mx-auto px-4 py-8 md:py-12 flex-grow max-w-4xl relative z-10 flex flex-col items-center justify-center gap-10">
+
+    <div class="text-center space-y-4 animate-float-slow mt-6">
+      <div class="inline-block px-4 py-1.5 rounded-full bg-white/80 backdrop-blur-sm text-pastel-deepPink text-xs md:text-sm font-bold uppercase tracking-widest shadow-sm border border-pink-100">
+        ✨ Today is all about you! ✨
+      </div>
+      <h1 class="font-heading text-4xl sm:text-6xl md:text-7xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pastel-deepPink via-rose-400 to-amber-400 drop-shadow-sm leading-tight tracking-tight px-2">
+        Happy Birthday Migueee! 🎉
+      </h1>
+      <p class="text-base sm:text-lg text-gray-600 max-w-md mx-auto font-medium">
+        Wishing you a magnificent day filled with happiness, laughter, delicious cake, and incredible memories! 💕
+      </p>
+    </div>
+
+    <section class="w-full flex flex-col items-center">
+      <div class="glass-card p-6 md:p-8 rounded-3xl w-full max-w-md text-center relative overflow-hidden flex flex-col items-center border border-white">
+        
+        <p class="text-xs font-bold text-pastel-deepPink tracking-wider uppercase mb-1">Interactive Cake 🎂</p>
+        <h2 class="font-heading text-xl font-bold text-gray-800 mb-4">Tap candles to blow them out!</h2>
+
+        <!-- Interactive SVG Cake -->
+        <div class="relative my-2 cursor-pointer group" onclick="blowAllCandles()">
+          <svg width="220" height="180" viewBox="0 0 200 160" class="drop-shadow-lg transition-transform duration-300 group-hover:scale-105">
+            <!-- Cake Base Layer -->
+            <rect x="20" y="100" width="160" height="50" rx="10" fill="#ffb3c6" />
+            <path d="M 20 115 Q 40 125 60 115 Q 80 125 100 115 Q 120 125 140 115 Q 160 125 180 115 L 180 100 L 20 100 Z" fill="#ffffff" opacity="0.9" />
+            
+            <!-- Cake Top Layer -->
+            <rect x="35" y="60" width="130" height="45" rx="8" fill="#ffe3ec" />
+            <path d="M 35 75 Q 50 85 65 75 Q 80 85 95 75 Q 110 85 125 75 Q 140 85 165 75 L 165 60 L 35 60 Z" fill="#ff758f" opacity="0.8" />
+            
+            <!-- Frosting Accents -->
+            <circle cx="50" cy="60" r="6" fill="#ffd166" />
+            <circle cx="80" cy="60" r="6" fill="#ffd166" />
+            <circle cx="110" cy="60" r="6" fill="#ffd166" />
+            <circle cx="140" cy="60" r="6" fill="#ffd166" />
+
+            <!-- Candles -->
+            <g id="candle1" class="candle cursor-pointer" onclick="event.stopPropagation(); toggleCandle(1)">
+              <rect x="55" y="30" width="8" height="30" rx="3" fill="#64dfdf" />
+              <path class="flame" d="M 59 15 C 55 22, 57 28, 59 30 C 61 28, 63 22, 59 15 Z" fill="#ffd166" />
+              <circle class="flame" cx="59" cy="24" r="3" fill="#ff758f" />
+              <path class="smoke" d="M 59 28 C 55 20, 63 15, 59 5" stroke="#aaa" stroke-width="2" fill="none" />
+            </g>
+
+            <g id="candle2" class="candle cursor-pointer" onclick="event.stopPropagation(); toggleCandle(2)">
+              <rect x="96" y="22" width="8" height="38" rx="3" fill="#ff99c8" />
+              <path class="flame" d="M 100 7 C 96 14, 98 20, 100 22 C 102 20, 104 14, 100 7 Z" fill="#ffd166" />
+              <circle class="flame" cx="100" cy="16" r="3" fill="#ff758f" />
+              <path class="smoke" d="M 100 20 C 96 12, 104 7, 100 -3" stroke="#aaa" stroke-width="2" fill="none" />
+            </g>
+
+            <g id="candle3" class="candle cursor-pointer" onclick="event.stopPropagation(); toggleCandle(3)">
+              <rect x="137" y="30" width="8" height="30" rx="3" fill="#cfbaf0" />
+              <path class="flame" d="M 141 15 C 137 22, 139 28, 141 30 C 143 28, 145 22, 141 15 Z" fill="#ffd166" />
+              <circle class="flame" cx="141" cy="24" r="3" fill="#ff758f" />
+              <path class="smoke" d="M 141 28 C 137 20, 145 15, 141 5" stroke="#aaa" stroke-width="2" fill="none" />
+            </g>
+          </svg>
+        </div>
+
+        <p id="candleStatus" class="text-xs text-gray-500 font-semibold mt-1 bg-pink-50/80 px-3 py-1 rounded-full border border-pink-100">
+          Make a wish & blow out the candles! 🕯️
+        </p>
+
+        <!-- Big Surprise Button -->
+        <button onclick="triggerSurprise()" class="mt-5 w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-pastel-deepPink via-rose-400 to-pastel-gold text-white font-heading font-bold text-lg shadow-lg hover:shadow-xl hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 animate-pulse-glow flex items-center justify-center gap-2">
+          <i data-lucide="sparkles" class="w-5 h-5"></i>
+          <span>Click For Birthday Surprise!</span>
+          <i data-lucide="gift" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="w-full space-y-6">
+      <div class="text-center space-y-1">
+        <h2 class="font-heading text-2xl md:text-3xl font-bold text-gray-800">Memory Cards & Wishes 💌</h2>
+        <p class="text-sm text-gray-500">Tap any card to flip and reveal sweet notes!</p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        
+        <!-- Card 1 -->
+        <div class="flip-card h-80 w-full cursor-pointer" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front glass-card p-4 flex flex-col items-center justify-between border-2 border-white shadow-md">
+              <div class="w-full h-48 rounded-xl bg-gradient-to-br from-pink-200 to-rose-300 flex items-center justify-center overflow-hidden relative">
+                <i data-lucide="party-popper" class="w-16 h-16 text-white/90 drop-shadow"></i>
+                <span class="absolute bottom-2 right-2 text-xs bg-white/80 px-2 py-0.5 rounded-md font-bold text-pastel-deepPink">Tap to flip 🔄</span>
+              </div>
+              <div class="text-center py-2">
+                <p class="font-heading font-bold text-gray-800 text-lg">Joy & Victory 🌟</p>
+                <p class="text-xs text-gray-500">A special wish for Migueee</p>
+              </div>
+            </div>
+            <div class="flip-card-back glass-card p-6 flex flex-col justify-center items-center text-center bg-gradient-to-br from-white to-pink-50 border-2 border-pastel-rose">
+              <i data-lucide="heart" class="w-8 h-8 text-pastel-deepPink mb-3 fill-pastel-pink"></i>
+              <h3 class="font-heading font-bold text-gray-800 text-lg mb-2">Keep Shining Bright!</h3>
+              <p class="text-sm text-gray-600 leading-relaxed">
+                May this new year bring you endless opportunities, unforgettable adventures, and victory in everything you do! ✨
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="flip-card h-80 w-full cursor-pointer" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front glass-card p-4 flex flex-col items-center justify-between border-2 border-white shadow-md">
+              <div class="w-full h-48 rounded-xl bg-gradient-to-br from-amber-200 to-pink-200 flex items-center justify-center overflow-hidden relative">
+                <i data-lucide="smile" class="w-16 h-16 text-white/90 drop-shadow"></i>
+                <span class="absolute bottom-2 right-2 text-xs bg-white/80 px-2 py-0.5 rounded-md font-bold text-pastel-deepPink">Tap to flip 🔄</span>
+              </div>
+              <div class="text-center py-2">
+                <p class="font-heading font-bold text-gray-800 text-lg">Good Vibes Only 🎧</p>
+                <p class="text-xs text-gray-500">Always stay awesome</p>
+              </div>
+            </div>
+            <div class="flip-card-back glass-card p-6 flex flex-col justify-center items-center text-center bg-gradient-to-br from-white to-amber-50 border-2 border-amber-200">
+              <i data-lucide="crown" class="w-8 h-8 text-amber-400 mb-3 fill-amber-100"></i>
+              <h3 class="font-heading font-bold text-gray-800 text-lg mb-2">Level Up!</h3>
+              <p class="text-sm text-gray-600 leading-relaxed">
+                Here’s to another year of legendary moments, awesome music, and pure happiness. Enjoy your big day to the fullest! 🎮🎂
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="flip-card h-80 w-full cursor-pointer sm:col-span-2 md:col-span-1" onclick="this.classList.toggle('flipped')">
+          <div class="flip-card-inner">
+            <div class="flip-card-front glass-card p-4 flex flex-col items-center justify-between border-2 border-white shadow-md">
+              <div class="w-full h-48 rounded-xl bg-gradient-to-br from-purple-200 to-pink-200 flex items-center justify-center overflow-hidden relative">
+                <i data-lucide="cake" class="w-16 h-16 text-white/90 drop-shadow"></i>
+                <span class="absolute bottom-2 right-2 text-xs bg-white/80 px-2 py-0.5 rounded-md font-bold text-pastel-deepPink">Tap to flip 🔄</span>
+              </div>
+              <div class="text-center py-2">
+                <p class="font-heading font-bold text-gray-800 text-lg">Sweet Dreams 🍬</p>
+                <p class="text-xs text-gray-500">To a sweet year ahead</p>
+              </div>
+            </div>
+            <div class="flip-card-back glass-card p-6 flex flex-col justify-center items-center text-center bg-gradient-to-br from-white to-purple-50 border-2 border-purple-200">
+              <i data-lucide="sparkles" class="w-8 h-8 text-purple-400 mb-3"></i>
+              <h3 class="font-heading font-bold text-gray-800 text-lg mb-2">Make A Wish!</h3>
+              <p class="text-sm text-gray-600 leading-relaxed">
+                Never stop dreaming big and chasing what makes your heart light up. Best birthday wishes to you, Migueee! 💖
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <div id="surpriseModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm opacity-0 pointer-events-none transition-all duration-300 px-4">
+      <div class="glass-card max-w-lg w-full p-6 md:p-8 rounded-3xl text-center space-y-5 transform scale-90 transition-all duration-300 relative border-2 border-white shadow-2xl">
+        
+        <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-pastel-deepPink p-2 rounded-full hover:bg-pink-50 transition-colors">
+          <i data-lucide="x" class="w-6 h-6"></i>
+        </button>
+
+        <div class="w-16 h-16 bg-pink-100 rounded-full flex items-center justify-center mx-auto text-pastel-deepPink animate-bounce-gentle">
+          <i data-lucide="gift" class="w-8 h-8"></i>
+        </div>
+
+        <h3 class="font-heading text-2xl md:text-3xl font-extrabold text-gray-800">
+          Dear Migueee! 💌
+        </h3>
+
+        <div class="space-y-3 text-gray-600 text-sm md:text-base leading-relaxed bg-white/60 p-4 rounded-2xl border border-pink-100">
+          <p class="font-bold text-lg text-pastel-deepPink">
+            🎉 HAPPY BIRTHDAY! 🎉
+          </p>
+          <p>
+            May your special day be overflowing with warm smiles, sweet treats, lots of laughter, and memories you'll treasure forever!
+          </p>
+          <p class="font-cursive text-2xl text-pastel-deepPink pt-2">
+            "Wishing you a year full of happiness and success!"
+          </p>
+        </div>
+
+        <button onclick="triggerConfetti(); closeModal();" class="w-full py-3 rounded-2xl bg-pastel-deepPink text-white font-heading font-bold hover:bg-rose-500 transition-colors shadow-md">
+          Celebrate More! 🥳
+        </button>
+      </div>
+    </div>
+
+  </main>
+
+  <footer class="py-6 text-center text-xs text-gray-500 relative z-10">
+    <p>Created with 💕 especially for Migueee!</p>
+  </footer>
+
+  <script>
+    // Initialize Icons
+    lucide.createIcons();
+
+    // Sound & Web Audio API
+    let audioContext = null;
+    let isPlaying = false;
+    let melodyTimer = null;
+    const candlesState = { 1: true, 2: true, 3: true };
+
+    function initAudio() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+    }
+
+    function playTone(freq, duration, type = 'sine', delay = 0) {
+      if (!audioContext) return;
+      setTimeout(() => {
+        try {
+          const osc = audioContext.createOscillator();
+          const gain = audioContext.createGain();
+          osc.type = type;
+          osc.frequency.setValueAtTime(freq, audioContext.currentTime);
+          
+          gain.gain.setValueAtTime(0.15, audioContext.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + duration);
+
+          osc.connect(gain);
+          gain.connect(audioContext.destination);
+
+          osc.start();
+          osc.stop(audioContext.currentTime + duration);
+        } catch (e) {
+          console.error(e);
+        }
+      }, delay);
+    }
+
+    const notes = {
+      C4: 261.63, D4: 293.66, E4: 329.63, F4: 349.23, G4: 392.00, A4: 440.00, B4: 493.88,
+      C5: 523.25, D5: 587.33, E5: 659.25, F5: 698.46, G5: 783.99
+    };
+
+    const happyBirthdayMelody = [
+      { note: notes.C4, duration: 0.3, delay: 0 },
+      { note: notes.C4, duration: 0.3, delay: 350 },
+      { note: notes.D4, duration: 0.6, delay: 700 },
+      { note: notes.C4, duration: 0.6, delay: 1300 },
+      { note: notes.F4, duration: 0.6, delay: 1900 },
+      { note: notes.E4, duration: 1.0, delay: 2500 },
+
+      { note: notes.C4, duration: 0.3, delay: 3500 },
+      { note: notes.C4, duration: 0.3, delay: 3850 },
+      { note: notes.D4, duration: 0.6, delay: 4200 },
+      { note: notes.C4, duration: 0.6, delay: 4800 },
+      { note: notes.G4, duration: 0.6, delay: 5400 },
+      { note: notes.F4, duration: 1.0, delay: 6000 },
+
+      { note: notes.C4, duration: 0.3, delay: 7000 },
+      
